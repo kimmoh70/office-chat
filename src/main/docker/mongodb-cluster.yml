@@ -1,0 +1,16 @@
+version: '2'
+services:
+    office_bot-mongodb:
+        image: mongo:3.4.8
+        ports:
+            - "27017:27017"
+        command: mongos --configdb office_bot-mongodb-config
+    office_bot-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    office_bot-mongodb-config:
+        image: mongo:3.4.8
+        container_name: office_bot-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
